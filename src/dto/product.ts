@@ -3,6 +3,7 @@ export type Product = {
   title: string;
   origin_price: number;
   price: number;
+  unit: string;
   is_enabled: boolean | number;
   category: string;
   description: string;

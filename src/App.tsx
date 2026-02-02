@@ -1,8 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import "./assets/style.css";
 import type { LoginFormData } from "./dto/auth";
 import type { Product } from "./dto/product";
+import ProductModal from "./components/ProductModal";
+import type {
+  ProductModalHandle,
+  ModalType,
+  TemplateData,
+} from "./types/modal";
 
 const API_BASE = import.meta.env.VITE_API_BASE;
 const API_PATH = import.meta.env.VITE_API_PATH;
@@ -13,28 +19,11 @@ function App() {
     password: "",
   });
 
-  const [isAuth, setisAuth] = useState(false);
+  const [isAuth, setIsAuth] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
-  const [tempProduct, setTempProduct] = useState<Product | null>(null);
-  const [mainImage, setMainImage] = useState<string>("");
+  const modalRef = useRef<ProductModalHandle>(null);
 
-  async function checkLogin() {
-    try {
-      const token = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("hexToken="))
-        ?.split("=")[1];
-
-      if (!token) return;
-      axios.defaults.headers.common.Authorization = token;
-
-      await axios.post(`${API_BASE}/api/user/check`);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  const getData = async () => {
+  const getProductData = async () => {
     try {
       const response = await axios.get(
         `${API_BASE}/api/${API_PATH}/admin/products`,
@@ -46,6 +35,23 @@ function App() {
       } else {
         console.error(err);
       }
+    }
+  };
+
+  const checkLogin = async () => {
+    try {
+      const response = await axios.post(`${API_BASE}/api/user/check`);
+      console.log(response.data);
+      setIsAuth(true);
+      getProductData();
+    } catch (error) {
+      console.error(error);
+      if (axios.isAxiosError(error)) {
+        console.log(error.response?.data?.message || error.message);
+      } else {
+        console.log("Unknown error");
+      }
+      setIsAuth(false);
     }
   };
 
@@ -67,9 +73,9 @@ function App() {
 
       axios.defaults.headers.common.Authorization = `${token}`;
 
-      getData();
+      getProductData();
 
-      setisAuth(true);
+      setIsAuth(true);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         alert(`登入失敗: ${error.response?.data?.message || "Unknown error"}`);
@@ -79,8 +85,104 @@ function App() {
     }
   };
 
+  const handleModalConfirm = async (type: ModalType, data: TemplateData) => {
+    try {
+      if (type === "create") {
+        // 建立新產品
+        await axios.post(`${API_BASE}/api/${API_PATH}/admin/product`, {
+          data: {
+            ...data,
+            origin_price: Number(data.origin_price),
+            price: Number(data.price),
+            is_enabled: data.is_enabled ? 1 : 0,
+          },
+        });
+        alert("產品建立成功");
+      } else if (type === "edit") {
+        // 編輯產品
+        await axios.put(
+          `${API_BASE}/api/${API_PATH}/admin/product/${data.id}`,
+          {
+            data: {
+              ...data,
+              origin_price: Number(data.origin_price),
+              price: Number(data.price),
+              is_enabled: data.is_enabled ? 1 : 0,
+            },
+          },
+        );
+        alert("產品更新成功");
+      } else if (type === "delete") {
+        // 刪除產品
+        await axios.delete(
+          `${API_BASE}/api/${API_PATH}/admin/product/${data.id}`,
+        );
+        alert("產品刪除成功");
+      }
+      // 重新取得產品列表
+      await getProductData();
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        alert(`操作失敗: ${error.response?.data?.message || "Unknown error"}`);
+      } else {
+        alert("操作失敗: Unknown error");
+      }
+    }
+  };
+
+  const openCreateModal = () => {
+    modalRef.current?.openModal("create");
+  };
+
+  const openEditModal = (product: Product) => {
+    modalRef.current?.openModal("edit", {
+      id: product.id,
+      title: product.title,
+      category: product.category,
+      origin_price: product.origin_price,
+      price: product.price,
+      unit: product.unit,
+      description: product.description,
+      content: product.content,
+      is_enabled: Boolean(product.is_enabled),
+      imageUrl: product.imageUrl || "",
+      imagesUrl: product.imagesUrl || [],
+    });
+  };
+
+  const openDeleteModal = (product: Product) => {
+    modalRef.current?.openModal("delete", {
+      id: product.id,
+      title: product.title,
+      category: product.category,
+      origin_price: product.origin_price,
+      price: product.price,
+      unit: product.unit,
+      description: product.description,
+      content: product.content,
+      is_enabled: Boolean(product.is_enabled),
+      imageUrl: product.imageUrl || "",
+      imagesUrl: product.imagesUrl || [],
+    });
+  };
+
+  useEffect(() => {
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("hexToken="))
+      ?.split("=")[1];
+
+    if (!token) return;
+    axios.defaults.headers.common.Authorization = token;
+
+    (async () => {
+      await checkLogin();
+    })();
+  }, []);
+
   return (
     <>
+      <ProductModal ref={modalRef} onConfirm={handleModalConfirm} />
       {isAuth ? (
         <div className="min-h-screen bg-slate-50 text-slate-900">
           <div className="mx-auto max-w-6xl px-4 py-10">
@@ -88,30 +190,36 @@ function App() {
               <div className="flex-1">
                 <div className="flex items-center justify-between">
                   <h2 className="text-xl font-semibold">產品列表</h2>
+                </div>
+
+                {/* 新增產品按鈕 */}
+                <div className="mt-4 text-end">
                   <button
-                    className="rounded-md bg-rose-500 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-rose-600"
                     type="button"
-                    id="check"
-                    onClick={checkLogin}
+                    onClick={openCreateModal}
+                    className="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow hover:bg-blue-700"
                   >
-                    確認是否登入
+                    建立新的產品
                   </button>
                 </div>
+
                 <div className="mt-4 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
                   <table className="w-full text-left text-sm">
                     <thead className="bg-slate-100 text-slate-700">
                       <tr>
+                        <th className="px-4 py-3 font-medium">分類</th>
                         <th className="px-4 py-3 font-medium">產品名稱</th>
                         <th className="px-4 py-3 font-medium">原價</th>
                         <th className="px-4 py-3 font-medium">售價</th>
                         <th className="px-4 py-3 font-medium">是否啟用</th>
-                        <th className="px-4 py-3 font-medium">查看細節</th>
+                        <th className="px-4 py-3 font-medium">編輯</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
                       {products && products.length > 0 ? (
                         products.map((item) => (
                           <tr key={item.id} className="hover:bg-slate-50">
+                            <td className="px-4 py-3">{item.category}</td>
                             <td className="px-4 py-3 font-medium text-slate-900">
                               {item.title}
                             </td>
@@ -120,17 +228,26 @@ function App() {
                               {item.price}
                             </td>
                             <td className="px-4 py-3">
-                              {item.is_enabled ? "啟用" : "未啟用"}
+                              <span
+                                className={`${item.is_enabled ? "text-green-600" : "text-red-600"}`}
+                              >
+                                {item.is_enabled ? "啟用" : "未啟用"}
+                              </span>
                             </td>
-                            <td className="px-4 py-3">
+                            <td className="space-x-3 px-4 py-3">
                               <button
                                 className="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow hover:bg-blue-700"
-                                onClick={() => {
-                                  setTempProduct(item);
-                                  setMainImage(item.imageUrl || "");
-                                }}
+                                type="button"
+                                onClick={() => openEditModal(item)}
                               >
-                                查看細節
+                                編輯
+                              </button>
+                              <button
+                                className="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow hover:bg-red-700"
+                                type="button"
+                                onClick={() => openDeleteModal(item)}
+                              >
+                                刪除
                               </button>
                             </td>
                           </tr>
@@ -148,60 +265,6 @@ function App() {
                     </tbody>
                   </table>
                 </div>
-              </div>
-              <div className="w-full lg:w-95">
-                <h2 className="text-xl font-semibold">單一產品細節</h2>
-                {tempProduct ? (
-                  <div className="mt-4 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
-                    <img
-                      src={mainImage || tempProduct.imageUrl}
-                      className="h-48 w-full object-cover"
-                      alt="主圖"
-                    />
-                    <div className="space-y-3 p-4">
-                      <div className="flex items-center gap-2">
-                        <h5 className="text-lg font-semibold">
-                          {tempProduct.title}
-                        </h5>
-                        <span className="rounded-full bg-blue-100 px-2 py-1 text-xs font-semibold text-blue-700">
-                          {tempProduct.category}
-                        </span>
-                      </div>
-                      <p className="text-sm text-slate-600">
-                        商品描述：{tempProduct.description}
-                      </p>
-                      <p className="text-sm text-slate-600">
-                        商品內容：{tempProduct.content}
-                      </p>
-                      <div className="text-sm text-slate-700">
-                        <span className="mr-2 text-slate-400 line-through">
-                          {tempProduct.origin_price}
-                        </span>
-                        元 / {tempProduct.price} 元
-                      </div>
-                      <div>
-                        <h5 className="text-sm font-semibold text-slate-700">
-                          更多圖片：
-                        </h5>
-                        <div className="mt-2 flex flex-wrap gap-2">
-                          {tempProduct.imagesUrl?.map((url, index) => (
-                            <img
-                              key={index}
-                              src={url}
-                              className="h-16 w-16 cursor-pointer rounded-md object-cover"
-                              alt="副圖"
-                              onClick={() => setMainImage(url)}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <p className="mt-4 rounded-lg border border-dashed border-slate-300 bg-white p-6 text-sm text-slate-500">
-                    請選擇一個商品查看
-                  </p>
-                )}
               </div>
             </div>
           </div>
