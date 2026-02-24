@@ -2,8 +2,9 @@ import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import "./assets/style.css";
 import type { LoginFormData } from "./dto/auth";
-import type { Product } from "./dto/product";
+import type { Product, Pagination as PaginationType } from "./dto/product";
 import ProductModal from "./components/ProductModal";
+import Pagination from "./components/Pagination";
 import type {
   ProductModalHandle,
   ModalType,
@@ -21,14 +22,23 @@ function App() {
 
   const [isAuth, setIsAuth] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
+  const [pagination, setPagination] = useState<PaginationType>({
+    total_pages: 0,
+    current_page: 1,
+    has_pre: false,
+    has_next: false,
+    category: "",
+  });
   const modalRef = useRef<ProductModalHandle>(null);
 
-  const getProductData = async () => {
+  const getProductData = async (page: number = 1) => {
     try {
       const response = await axios.get(
         `${API_BASE}/api/${API_PATH}/admin/products`,
+        { params: { page } },
       );
       setProducts(response.data.products);
+      setPagination(response.data.pagination);
     } catch (err) {
       if (axios.isAxiosError(err)) {
         console.error(err.response?.data?.message);
@@ -265,6 +275,12 @@ function App() {
                     </tbody>
                   </table>
                 </div>
+
+                {/* 分頁 */}
+                <Pagination
+                  pagination={pagination}
+                  onPageChange={getProductData}
+                />
               </div>
             </div>
           </div>
