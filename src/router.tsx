@@ -1,7 +1,5 @@
 import { createHashRouter } from "react-router";
 
-const basename = import.meta.env.MODE === "production" ? "/react-demo-w2" : "/";
-
 const router = createHashRouter(
   [
     {
@@ -40,7 +38,6 @@ const router = createHashRouter(
       },
     },
   ],
-  { basename },
 );
 
 export default router;
