@@ -1,8 +1,8 @@
-import { createBrowserRouter } from "react-router";
+import { createHashRouter } from "react-router";
 
 const basename = import.meta.env.MODE === "production" ? "/react-demo-w2" : "/";
 
-const router = createBrowserRouter(
+const router = createHashRouter(
   [
     {
       path: "/",
