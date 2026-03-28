@@ -1,73 +1,94 @@
-# React + TypeScript + Vite
+# FitPulse - Fitness App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React 練習專案，包含健身 APP Landing Page 與後台產品管理系統。
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React 19 + TypeScript
+- Vite 7
+- Tailwind CSS 4
+- React Router 7 (Data Mode)
+- Axios
+- Lucide React (Icons)
 
-## React Compiler
+## Getting Started
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+# 安裝依賴
+npm install
 
-## Expanding the ESLint configuration
+# 複製環境變數
+cp .env.example .env
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# 啟動開發伺服器
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Environment Variables
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+在 `.env` 中設定：
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+VITE_API_BASE=
+VITE_API_PATH=
+```
+
+## Routes
+
+| Path            | Page           | Description                          |
+| --------------- | -------------- | ------------------------------------ |
+| `/`             | FitnessLanding | Dark mode 健身 Landing Page          |
+| `/products`     | ProductList    | 前台產品列表（分類篩選、搜尋、分頁） |
+| `/products/:id` | ProductDetail  | 前台產品詳情（圖片畫廊、數量選擇）   |
+| `/admin`        | AdminDashboard | 後台產品 CRUD 管理（需登入）         |
+
+## Project Structure
+
+```
+src/
+├── main.tsx                # RouterProvider 入口
+├── router.tsx              # createBrowserRouter 路由定義（lazy loading）
+├── assets/style.css        # Tailwind + 自定義動畫與霓虹光效
+├── dto/                    # API 型別定義
+├── types/                  # Modal 型別
+├── pages/
+│   ├── FitnessLanding.tsx  # 健身首頁
+│   ├── ProductList.tsx     # 前台產品列表
+│   ├── ProductDetail.tsx   # 前台產品詳情
+│   └── AdminDashboard.tsx  # 後台管理
+└── components/
+    ├── Pagination.tsx      # 通用分頁
+    ├── ProductModal.tsx    # 後台 CRUD Modal
+    └── fitness/            # Landing Page 區塊元件
+```
+
+## API
+
+**前台（Public）**
+
+- `GET /api/{path}/products` - 產品列表（支援分頁與分類篩選）
+- `GET /api/{path}/product/{id}` - 單一產品詳情
+
+**後台（Admin，需認證）**
+
+- `POST /admin/signin` - 登入
+- `GET /api/{path}/admin/products` - 管理產品列表
+- `POST /api/{path}/admin/product` - 新增產品
+- `PUT /api/{path}/admin/product/{id}` - 更新產品
+- `DELETE /api/{path}/admin/product/{id}` - 刪除產品
+
+## Scripts
+
+```bash
+npm run dev       # 開發伺服器（HMR）
+npm run build     # TypeScript 檢查 + 打包
+npm run lint      # ESLint 靜態分析
+npm run preview   # 預覽 production build
+npm run deploy    # 部署至 GitHub Pages
+```
+
+## Deploy
+
+```bash
+npm run deploy
 ```

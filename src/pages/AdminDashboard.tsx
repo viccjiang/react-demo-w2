@@ -1,20 +1,19 @@
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import "./assets/style.css";
-import type { LoginFormData } from "./dto/auth";
-import type { Product, Pagination as PaginationType } from "./dto/product";
-import ProductModal from "./components/ProductModal";
-import Pagination from "./components/Pagination";
+import type { LoginFormData } from "../dto/auth";
+import type { Product, Pagination as PaginationType } from "../dto/product";
+import ProductModal from "../components/ProductModal";
+import Pagination from "../components/Pagination";
 import type {
   ProductModalHandle,
   ModalType,
   TemplateData,
-} from "./types/modal";
+} from "../types/modal";
 
 const API_BASE = import.meta.env.VITE_API_BASE;
 const API_PATH = import.meta.env.VITE_API_PATH;
 
-function App() {
+export default function AdminDashboard() {
   const [formData, setFormData] = useState<LoginFormData>({
     username: "",
     password: "",
@@ -98,7 +97,6 @@ function App() {
   const handleModalConfirm = async (type: ModalType, data: TemplateData) => {
     try {
       if (type === "create") {
-        // 建立新產品
         await axios.post(`${API_BASE}/api/${API_PATH}/admin/product`, {
           data: {
             ...data,
@@ -109,7 +107,6 @@ function App() {
         });
         alert("產品建立成功");
       } else if (type === "edit") {
-        // 編輯產品
         await axios.put(
           `${API_BASE}/api/${API_PATH}/admin/product/${data.id}`,
           {
@@ -123,13 +120,11 @@ function App() {
         );
         alert("產品更新成功");
       } else if (type === "delete") {
-        // 刪除產品
         await axios.delete(
           `${API_BASE}/api/${API_PATH}/admin/product/${data.id}`,
         );
         alert("產品刪除成功");
       }
-      // 重新取得產品列表
       await getProductData();
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -202,7 +197,6 @@ function App() {
                   <h2 className="text-xl font-semibold">產品列表</h2>
                 </div>
 
-                {/* 新增產品按鈕 */}
                 <div className="mt-4 text-end">
                   <button
                     type="button"
@@ -276,7 +270,6 @@ function App() {
                   </table>
                 </div>
 
-                {/* 分頁 */}
                 <Pagination
                   pagination={pagination}
                   onPageChange={getProductData}
@@ -340,5 +333,3 @@ function App() {
     </>
   );
 }
-
-export default App;
