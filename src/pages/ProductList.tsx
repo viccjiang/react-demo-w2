@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router";
 import axios from "axios";
-import { Search, Filter, ChevronRight, ShoppingBag, ShoppingCart, Repeat2, Loader2 } from "lucide-react";
+import { Search, Filter, ChevronRight, ShoppingBag, ShoppingCart, Loader2 } from "lucide-react";
 import type { Product, Pagination as PaginationType } from "../dto/product";
 
 const API_BASE = import.meta.env.VITE_API_BASE;
@@ -82,42 +82,7 @@ export default function ProductList() {
     : products;
 
   return (
-    <div className="min-h-screen bg-dark-950 font-body text-white">
-      {/* Navbar */}
-      <nav className="sticky top-0 z-50 border-b border-white/5 bg-dark-950/80 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-neon-blue to-neon-purple">
-              <Repeat2 className="h-5 w-5 text-white" />
-            </div>
-            <span className="font-heading text-xl font-bold text-white">
-              Rep<span className="text-neon-blue">X</span>
-            </span>
-          </Link>
-          <div className="flex items-center gap-4">
-            <Link
-              to="/"
-              className="text-sm font-medium text-slate-400 transition-colors hover:text-white"
-            >
-              首頁
-            </Link>
-            <Link
-              to="/products"
-              className="text-sm font-semibold text-neon-blue"
-            >
-              探索課程
-            </Link>
-            <Link
-              to="/cart"
-              className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 text-slate-400 transition-colors hover:border-neon-blue/30 hover:text-neon-blue"
-              aria-label="購物車"
-            >
-              <ShoppingCart className="h-5 w-5" />
-            </Link>
-          </div>
-        </div>
-      </nav>
-
+    <>
       {/* Hero Banner */}
       <section className="relative overflow-hidden bg-dark-900 py-16">
         <div className="pointer-events-none absolute -right-20 -top-20 h-[300px] w-[300px] rounded-full bg-neon-blue/10 blur-[100px]" />
@@ -201,7 +166,7 @@ export default function ProductList() {
             {filteredProducts.map((product) => (
               <Link
                 key={product.id}
-                to={`/products/${product.id}`}
+                to={`/product/${product.id}`}
                 className="group relative overflow-hidden rounded-2xl border border-white/5 bg-dark-800 transition-all duration-300 hover:-translate-y-1 hover:border-white/10"
               >
                 {/* Image */}
@@ -343,6 +308,6 @@ export default function ProductList() {
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 }

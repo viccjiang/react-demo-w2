@@ -7,7 +7,6 @@ import {
   ShoppingCart,
   Minus,
   Plus,
-  Repeat2,
   Tag,
   ChevronRight,
   Loader2,
@@ -77,29 +76,14 @@ export default function ProductDetail() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-dark-950 font-body text-white">
-        {/* Navbar */}
-        <nav className="sticky top-0 z-50 border-b border-white/5 bg-dark-950/80 backdrop-blur-xl">
-          <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-            <Link to="/" className="flex items-center gap-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-neon-blue to-neon-purple">
-                <Repeat2 className="h-5 w-5 text-white" />
-              </div>
-              <span className="font-heading text-xl font-bold text-white">
-                Rep<span className="text-neon-blue">X</span>
-              </span>
-            </Link>
-          </div>
-        </nav>
-        <div className="mx-auto max-w-7xl px-6 py-16">
-          <div className="grid animate-pulse gap-12 lg:grid-cols-2">
-            <div className="h-96 rounded-2xl bg-white/5" />
-            <div className="space-y-4">
-              <div className="h-6 w-24 rounded bg-white/5" />
-              <div className="h-10 w-3/4 rounded bg-white/5" />
-              <div className="h-20 w-full rounded bg-white/5" />
-              <div className="h-12 w-40 rounded bg-white/5" />
-            </div>
+      <div className="mx-auto max-w-7xl px-6 py-16">
+        <div className="grid animate-pulse gap-12 lg:grid-cols-2">
+          <div className="h-96 rounded-2xl bg-white/5" />
+          <div className="space-y-4">
+            <div className="h-6 w-24 rounded bg-white/5" />
+            <div className="h-10 w-3/4 rounded bg-white/5" />
+            <div className="h-20 w-full rounded bg-white/5" />
+            <div className="h-12 w-40 rounded bg-white/5" />
           </div>
         </div>
       </div>
@@ -108,7 +92,7 @@ export default function ProductDetail() {
 
   if (!product) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-dark-950 font-body text-white">
+      <div className="flex min-h-[60vh] flex-col items-center justify-center">
         <ShoppingBag className="mb-4 h-16 w-16 text-white/10" />
         <h2 className="font-heading text-2xl font-bold">找不到此商品</h2>
         <p className="mt-2 text-slate-500">
@@ -125,43 +109,7 @@ export default function ProductDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-dark-950 font-body text-white">
-      {/* Navbar */}
-      <nav className="sticky top-0 z-50 border-b border-white/5 bg-dark-950/80 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-neon-blue to-neon-purple">
-              <Repeat2 className="h-5 w-5 text-white" />
-            </div>
-            <span className="font-heading text-xl font-bold text-white">
-              Rep<span className="text-neon-blue">X</span>
-            </span>
-          </Link>
-          <div className="flex items-center gap-4">
-            <Link
-              to="/"
-              className="text-sm font-medium text-slate-400 transition-colors hover:text-white"
-            >
-              首頁
-            </Link>
-            <Link
-              to="/products"
-              className="text-sm font-medium text-slate-400 transition-colors hover:text-white"
-            >
-              探索課程
-            </Link>
-            <Link
-              to="/cart"
-              className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 text-slate-400 transition-colors hover:border-neon-blue/30 hover:text-neon-blue"
-              aria-label="購物車"
-            >
-              <ShoppingCart className="h-5 w-5" />
-            </Link>
-          </div>
-        </div>
-      </nav>
-
-      <div className="mx-auto max-w-7xl px-6 py-8">
+    <div className="mx-auto max-w-7xl px-6 py-8">
         {/* Breadcrumb */}
         <nav className="mb-8 flex items-center gap-2 text-sm text-slate-500">
           <Link to="/" className="transition-colors hover:text-slate-300">
@@ -358,6 +306,5 @@ export default function ProductDetail() {
           </div>
         </div>
       </div>
-    </div>
   );
 }

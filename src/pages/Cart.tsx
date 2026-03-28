@@ -86,42 +86,7 @@ export default function Cart() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-dark-950 font-body text-white">
-      {/* Navbar */}
-      <nav className="sticky top-0 z-50 border-b border-white/5 bg-dark-950/80 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-neon-blue to-neon-purple">
-              <Repeat2 className="h-5 w-5 text-white" />
-            </div>
-            <span className="font-heading text-xl font-bold text-white">
-              Rep<span className="text-neon-blue">X</span>
-            </span>
-          </Link>
-          <div className="flex items-center gap-4">
-            <Link
-              to="/"
-              className="text-sm font-medium text-slate-400 transition-colors hover:text-white"
-            >
-              首頁
-            </Link>
-            <Link
-              to="/products"
-              className="text-sm font-medium text-slate-400 transition-colors hover:text-white"
-            >
-              探索課程
-            </Link>
-            <Link
-              to="/cart"
-              className="text-sm font-semibold text-neon-blue"
-            >
-              購物車
-            </Link>
-          </div>
-        </div>
-      </nav>
-
-      <div className="mx-auto max-w-4xl px-6 py-8">
+    <div className="mx-auto max-w-4xl px-6 py-8">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <div>
@@ -206,7 +171,7 @@ export default function Cart() {
 
                     {/* Image */}
                     <Link
-                      to={`/products/${item.product_id}`}
+                      to={`/product/${item.product_id}`}
                       className="h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-dark-700"
                     >
                       {item.product.imageUrl ? (
@@ -225,7 +190,7 @@ export default function Cart() {
                     {/* Info */}
                     <div className="min-w-0 flex-1">
                       <Link
-                        to={`/products/${item.product_id}`}
+                        to={`/product/${item.product_id}`}
                         className="font-heading text-base font-bold text-white transition-colors hover:text-neon-blue"
                       >
                         {item.product.title}
@@ -320,6 +285,5 @@ export default function Cart() {
           </>
         )}
       </div>
-    </div>
   );
 }
