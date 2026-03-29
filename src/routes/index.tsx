@@ -8,6 +8,7 @@ import Login from "../pages/Login";
 import AdminProducts from "../pages/AdminProducts";
 import AdminOrders from "../pages/AdminOrders";
 import AdminCoupons from "../pages/AdminCoupons";
+import OrderSuccess from "../pages/OrderSuccess";
 import NotFound from "../pages/NotFound";
 
 const routes = [
@@ -30,6 +31,10 @@ const routes = [
       {
         path: "cart",
         element: <Cart />,
+      },
+      {
+        path: "order-success",
+        element: <OrderSuccess />,
       },
       {
         path: "*",

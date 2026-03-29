@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router";
-import axios from "axios";
 import {
   ArrowLeft,
   ShoppingBag,
@@ -9,12 +8,11 @@ import {
   Plus,
   Tag,
   ChevronRight,
-  Loader2,
 } from "lucide-react";
+import { Oval } from "react-loader-spinner";
 import type { Product } from "../dto/product";
-
-const API_BASE = import.meta.env.VITE_API_BASE;
-const API_PATH = import.meta.env.VITE_API_PATH;
+import { getProduct as fetchProduct } from "../services/products";
+import { addToCart as addToCartApi } from "../services/cart";
 
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
@@ -29,9 +27,7 @@ export default function ProductDetail() {
     if (!product) return;
     setIsAddingToCart(true);
     try {
-      await axios.post(`${API_BASE}/api/${API_PATH}/cart`, {
-        data: { product_id: product.id, qty: quantity },
-      });
+      await addToCartApi(product.id, quantity);
       setAddedToCart(true);
       setTimeout(() => setAddedToCart(false), 2000);
     } catch (err) {
@@ -42,12 +38,10 @@ export default function ProductDetail() {
   };
 
   useEffect(() => {
-    const fetchProduct = async () => {
+    const loadProduct = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get(
-          `${API_BASE}/api/${API_PATH}/product/${id}`,
-        );
+        const response = await fetchProduct(id!);
         const data = response.data.product;
         setProduct(data);
         setSelectedImage(data.imageUrl || "");
@@ -57,7 +51,7 @@ export default function ProductDetail() {
         setIsLoading(false);
       }
     };
-    if (id) fetchProduct();
+    if (id) loadProduct();
   }, [id]);
 
   const allImages = product
@@ -280,7 +274,7 @@ export default function ProductDetail() {
                 }`}
               >
                 {isAddingToCart ? (
-                  <Loader2 className="h-5 w-5 animate-spin" />
+                  <Oval height={20} width={20} color="#fff" secondaryColor="#a855f7" strokeWidth={4} strokeWidthSecondary={4} />
                 ) : addedToCart ? (
                   <>已加入購物車！</>
                 ) : (

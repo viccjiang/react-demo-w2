@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router";
-import axios from "axios";
-import { Search, Filter, ChevronRight, ShoppingBag, ShoppingCart, Loader2 } from "lucide-react";
+import { Search, Filter, ChevronRight, ShoppingBag, ShoppingCart } from "lucide-react";
+import { Oval } from "react-loader-spinner";
 import type { Product, Pagination as PaginationType } from "../dto/product";
-
-const API_BASE = import.meta.env.VITE_API_BASE;
-const API_PATH = import.meta.env.VITE_API_PATH;
+import { getProducts as fetchProducts } from "../services/products";
+import { addToCart as addToCartApi } from "../services/cart";
 
 const CATEGORIES = ["全部", "培訓", "體驗課"];
 
@@ -28,9 +27,7 @@ export default function ProductList() {
     e.stopPropagation();
     setAddingToCart((prev) => new Set(prev).add(productId));
     try {
-      await axios.post(`${API_BASE}/api/${API_PATH}/cart`, {
-        data: { product_id: productId, qty: 1 },
-      });
+      await addToCartApi(productId);
     } catch (err) {
       console.error(err);
     } finally {
@@ -45,14 +42,7 @@ export default function ProductList() {
   const getProducts = async (page: number = 1, category?: string) => {
     setIsLoading(true);
     try {
-      const params: Record<string, string | number> = { page };
-      if (category && category !== "全部") {
-        params.category = category;
-      }
-      const response = await axios.get(
-        `${API_BASE}/api/${API_PATH}/products`,
-        { params },
-      );
+      const response = await fetchProducts(page, category);
       setProducts(response.data.products);
       setPagination(response.data.pagination);
     } catch (err) {
@@ -242,7 +232,7 @@ export default function ProductList() {
                         aria-label={`將 ${product.title} 加入購物車`}
                       >
                         {addingToCart.has(product.id) ? (
-                          <Loader2 className="h-4 w-4 animate-spin" />
+                          <Oval height={16} width={16} color="#fff" secondaryColor="#a855f7" strokeWidth={4} strokeWidthSecondary={4} />
                         ) : (
                           <ShoppingCart className="h-4 w-4" />
                         )}

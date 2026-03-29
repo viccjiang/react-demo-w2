@@ -1,4 +1,5 @@
 import { forwardRef, useImperativeHandle, useState, useEffect } from "react";
+import { X } from "lucide-react";
 import type {
   ModalType,
   TemplateData,
@@ -85,41 +86,32 @@ const ProductModal = forwardRef<ProductModalHandle, ProductModalProps>(
 
     if (!isOpen) return null;
 
+    const inputClass =
+      "w-full rounded-xl border border-white/10 bg-dark-950 px-4 py-2.5 text-sm text-white placeholder-slate-500 outline-none transition-colors focus:border-neon-blue/50";
+
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-        <div className="relative max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-lg bg-white shadow-xl">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+        <div className="relative max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-white/5 bg-dark-800 shadow-2xl">
           {/* Modal Header */}
-          <div className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white px-6 py-4">
-            <h3 className="text-xl font-semibold text-slate-900">
+          <div className="sticky top-0 z-10 flex items-center justify-between border-b border-white/5 bg-dark-800 px-6 py-4">
+            <h3 className="font-heading text-lg font-bold text-white">
               {getModalTitle()}
             </h3>
             <button
               onClick={handleClose}
-              className="rounded-lg p-1 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
+              className="rounded-lg p-1.5 text-slate-400 transition hover:bg-white/5 hover:text-white"
             >
-              <svg
-                className="h-6 w-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
+              <X className="h-5 w-5" />
             </button>
           </div>
 
           {/* Modal Body */}
-          <div className="px-6 py-4">
+          <div className="px-6 py-5">
             {modalType === "delete" ? (
               <div className="py-4">
-                <p className="text-slate-700">
+                <p className="text-slate-300">
                   確定要刪除{" "}
-                  <span className="font-semibold text-slate-900">
+                  <span className="font-semibold text-white">
                     {templateData.title}
                   </span>{" "}
                   嗎？
@@ -129,15 +121,15 @@ const ProductModal = forwardRef<ProductModalHandle, ProductModalProps>(
                 </p>
               </div>
             ) : (
-              <form className="space-y-4">
+              <form className="space-y-5">
                 <div className="grid gap-4 md:grid-cols-2">
                   {/* 產品名稱 */}
                   <div>
                     <label
                       htmlFor="title"
-                      className="mb-2 block text-sm font-medium text-slate-700"
+                      className="mb-2 block text-sm font-medium text-slate-300"
                     >
-                      產品名稱 <span className="text-red-500">*</span>
+                      產品名稱 <span className="text-red-400">*</span>
                     </label>
                     <input
                       type="text"
@@ -145,7 +137,7 @@ const ProductModal = forwardRef<ProductModalHandle, ProductModalProps>(
                       name="title"
                       value={templateData.title}
                       onChange={handleInputChange}
-                      className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:outline-none"
+                      className={inputClass}
                       placeholder="請輸入產品名稱"
                       required
                     />
@@ -155,9 +147,9 @@ const ProductModal = forwardRef<ProductModalHandle, ProductModalProps>(
                   <div>
                     <label
                       htmlFor="category"
-                      className="mb-2 block text-sm font-medium text-slate-700"
+                      className="mb-2 block text-sm font-medium text-slate-300"
                     >
-                      分類 <span className="text-red-500">*</span>
+                      分類 <span className="text-red-400">*</span>
                     </label>
                     <input
                       type="text"
@@ -165,7 +157,7 @@ const ProductModal = forwardRef<ProductModalHandle, ProductModalProps>(
                       name="category"
                       value={templateData.category}
                       onChange={handleInputChange}
-                      className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:outline-none"
+                      className={inputClass}
                       placeholder="請輸入分類"
                       required
                     />
@@ -175,9 +167,9 @@ const ProductModal = forwardRef<ProductModalHandle, ProductModalProps>(
                   <div>
                     <label
                       htmlFor="unit"
-                      className="mb-2 block text-sm font-medium text-slate-700"
+                      className="mb-2 block text-sm font-medium text-slate-300"
                     >
-                      單位 <span className="text-red-500">*</span>
+                      單位 <span className="text-red-400">*</span>
                     </label>
                     <input
                       type="text"
@@ -185,7 +177,7 @@ const ProductModal = forwardRef<ProductModalHandle, ProductModalProps>(
                       name="unit"
                       value={templateData.unit}
                       onChange={handleInputChange}
-                      className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:outline-none"
+                      className={inputClass}
                       placeholder="個、件、盒"
                     />
                   </div>
@@ -194,9 +186,9 @@ const ProductModal = forwardRef<ProductModalHandle, ProductModalProps>(
                   <div>
                     <label
                       htmlFor="origin_price"
-                      className="mb-2 block text-sm font-medium text-slate-700"
+                      className="mb-2 block text-sm font-medium text-slate-300"
                     >
-                      原價 <span className="text-red-500">*</span>
+                      原價 <span className="text-red-400">*</span>
                     </label>
                     <input
                       type="number"
@@ -204,7 +196,7 @@ const ProductModal = forwardRef<ProductModalHandle, ProductModalProps>(
                       name="origin_price"
                       value={templateData.origin_price}
                       onChange={handleInputChange}
-                      className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:outline-none"
+                      className={inputClass}
                       placeholder="請輸入原價"
                       required
                       min={0}
@@ -215,9 +207,9 @@ const ProductModal = forwardRef<ProductModalHandle, ProductModalProps>(
                   <div>
                     <label
                       htmlFor="price"
-                      className="mb-2 block text-sm font-medium text-slate-700"
+                      className="mb-2 block text-sm font-medium text-slate-300"
                     >
-                      售價 <span className="text-red-500">*</span>
+                      售價 <span className="text-red-400">*</span>
                     </label>
                     <input
                       type="number"
@@ -225,7 +217,7 @@ const ProductModal = forwardRef<ProductModalHandle, ProductModalProps>(
                       name="price"
                       value={templateData.price}
                       onChange={handleInputChange}
-                      className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:outline-none"
+                      className={inputClass}
                       placeholder="請輸入售價"
                       required
                       min={0}
@@ -240,7 +232,7 @@ const ProductModal = forwardRef<ProductModalHandle, ProductModalProps>(
                     <div className="mb-3">
                       <label
                         htmlFor="imageUrl"
-                        className="mb-2 block text-sm font-medium text-slate-700"
+                        className="mb-2 block text-sm font-medium text-slate-300"
                       >
                         主要圖片網址
                       </label>
@@ -250,7 +242,7 @@ const ProductModal = forwardRef<ProductModalHandle, ProductModalProps>(
                         name="imageUrl"
                         value={templateData.imageUrl}
                         onChange={handleInputChange}
-                        className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:outline-none"
+                        className={inputClass}
                         placeholder="請輸入圖片連結"
                       />
                     </div>
@@ -258,7 +250,7 @@ const ProductModal = forwardRef<ProductModalHandle, ProductModalProps>(
                       <img
                         src={templateData.imageUrl}
                         alt="主圖"
-                        className="w-full rounded-md border border-slate-200 object-cover"
+                        className="w-full rounded-xl border border-white/10 object-cover"
                       />
                     )}
                   </div>
@@ -266,7 +258,7 @@ const ProductModal = forwardRef<ProductModalHandle, ProductModalProps>(
                   {/* 副圖管理 */}
                   <div className="md:col-span-2">
                     <div className="mb-3">
-                      <label className="mb-2 block text-sm font-medium text-slate-700">
+                      <label className="mb-2 block text-sm font-medium text-slate-300">
                         副圖片網址
                       </label>
                       <div className="space-y-3">
@@ -284,7 +276,7 @@ const ProductModal = forwardRef<ProductModalHandle, ProductModalProps>(
                                     imagesUrl: newImages,
                                   }));
                                 }}
-                                className="flex-1 rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:outline-none"
+                                className={`flex-1 ${inputClass}`}
                                 placeholder={`圖片網址 ${index + 1}`}
                               />
                               <button
@@ -299,7 +291,7 @@ const ProductModal = forwardRef<ProductModalHandle, ProductModalProps>(
                                     imagesUrl: newImages,
                                   }));
                                 }}
-                                className="rounded-md border border-red-300 bg-white px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50"
+                                className="rounded-xl border border-red-500/20 bg-red-500/10 px-3 py-2 text-sm font-medium text-red-400 transition-colors hover:border-red-500/40 hover:bg-red-500/20"
                               >
                                 刪除
                               </button>
@@ -308,7 +300,7 @@ const ProductModal = forwardRef<ProductModalHandle, ProductModalProps>(
                               <img
                                 src={url}
                                 alt={`副圖 ${index + 1}`}
-                                className="h-24 w-auto rounded-md border border-slate-200 object-cover"
+                                className="h-24 w-auto rounded-xl border border-white/10 object-cover"
                               />
                             )}
                           </div>
@@ -322,7 +314,7 @@ const ProductModal = forwardRef<ProductModalHandle, ProductModalProps>(
                             imagesUrl: [...prev.imagesUrl, ""],
                           }));
                         }}
-                        className="mt-3 w-full rounded-md border border-blue-300 bg-white px-4 py-2 text-sm font-medium text-blue-600 hover:bg-blue-50"
+                        className="mt-3 w-full rounded-xl border border-neon-blue/20 bg-neon-blue/10 px-4 py-2 text-sm font-medium text-neon-blue transition-colors hover:border-neon-blue/40 hover:bg-neon-blue/20"
                       >
                         新增圖片
                       </button>
@@ -334,7 +326,7 @@ const ProductModal = forwardRef<ProductModalHandle, ProductModalProps>(
                 <div>
                   <label
                     htmlFor="description"
-                    className="mb-2 block text-sm font-medium text-slate-700"
+                    className="mb-2 block text-sm font-medium text-slate-300"
                   >
                     產品描述
                   </label>
@@ -344,7 +336,7 @@ const ProductModal = forwardRef<ProductModalHandle, ProductModalProps>(
                     value={templateData.description}
                     onChange={handleInputChange}
                     rows={3}
-                    className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:outline-none"
+                    className={inputClass}
                     placeholder="請輸入產品描述"
                   />
                 </div>
@@ -353,7 +345,7 @@ const ProductModal = forwardRef<ProductModalHandle, ProductModalProps>(
                 <div>
                   <label
                     htmlFor="content"
-                    className="mb-2 block text-sm font-medium text-slate-700"
+                    className="mb-2 block text-sm font-medium text-slate-300"
                   >
                     產品說明
                   </label>
@@ -363,7 +355,7 @@ const ProductModal = forwardRef<ProductModalHandle, ProductModalProps>(
                     value={templateData.content}
                     onChange={handleInputChange}
                     rows={4}
-                    className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:outline-none"
+                    className={inputClass}
                     placeholder="請輸入產品說明"
                   />
                 </div>
@@ -376,11 +368,11 @@ const ProductModal = forwardRef<ProductModalHandle, ProductModalProps>(
                     name="is_enabled"
                     checked={templateData.is_enabled}
                     onChange={handleInputChange}
-                    className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-2 focus:ring-blue-100"
+                    className="h-4 w-4 rounded border-white/20 bg-dark-950 text-neon-blue focus:ring-2 focus:ring-neon-blue/20"
                   />
                   <label
                     htmlFor="is_enabled"
-                    className="ml-2 text-sm font-medium text-slate-700"
+                    className="ml-2 text-sm font-medium text-slate-300"
                   >
                     是否啟用
                   </label>
@@ -390,19 +382,19 @@ const ProductModal = forwardRef<ProductModalHandle, ProductModalProps>(
           </div>
 
           {/* Modal Footer */}
-          <div className="sticky bottom-0 flex items-center justify-end gap-3 border-t border-slate-200 bg-white px-6 py-4">
+          <div className="sticky bottom-0 flex items-center justify-end gap-3 border-t border-white/5 bg-dark-800 px-6 py-4">
             <button
               onClick={handleClose}
-              className="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50"
+              className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-300 transition-colors hover:border-white/20 hover:text-white"
             >
               取消
             </button>
             <button
               onClick={handleConfirm}
-              className={`rounded-md px-4 py-2 text-sm font-semibold text-white shadow-sm ${
+              className={`rounded-xl px-4 py-2 text-sm font-bold text-white transition-all ${
                 modalType === "delete"
-                  ? "bg-red-600 hover:bg-red-700"
-                  : "bg-blue-600 hover:bg-blue-700"
+                  ? "bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.3)] hover:shadow-[0_0_25px_rgba(239,68,68,0.5)]"
+                  : "bg-gradient-to-r from-neon-blue to-neon-purple shadow-[0_0_15px_rgba(0,212,255,0.3)] hover:shadow-[0_0_25px_rgba(0,212,255,0.5)]"
               }`}
             >
               {modalType === "delete" ? "確認刪除" : "確認"}
