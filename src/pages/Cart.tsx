@@ -15,6 +15,7 @@ import type { OrderFormData } from "../dto/order";
 import FullPageLoader from "../components/FullPageLoader";
 import * as cartService from "../services/cart";
 import { submitOrder as submitOrderApi } from "../services/orders";
+import useMessage from "../hooks/useMessage";
 
 export default function Cart() {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ export default function Cart() {
   const [isLoading, setIsLoading] = useState(true);
   const [loadingItems, setLoadingItems] = useState<Set<string>>(new Set());
   const [isFullPageLoading, setIsFullPageLoading] = useState(false);
+  const { showSuccess, showError } = useMessage();
 
   const {
     register,
@@ -54,7 +56,9 @@ export default function Cart() {
     try {
       await cartService.updateCartItem(item.id, item.product_id, newQty);
       await fetchCart();
+      showSuccess("已更新數量");
     } catch (err) {
+      showError("更新數量失敗");
       console.error(err);
     } finally {
       setLoadingItems((prev) => {
@@ -70,7 +74,9 @@ export default function Cart() {
     try {
       await cartService.removeCartItem(id);
       await fetchCart();
+      showSuccess("已移除商品");
     } catch (err) {
+      showError("移除商品失敗");
       console.error(err);
     } finally {
       setLoadingItems((prev) => {
@@ -86,7 +92,9 @@ export default function Cart() {
     try {
       await cartService.clearCart();
       await fetchCart();
+      showSuccess("已清空購物車");
     } catch (err) {
+      showError("清空購物車失敗");
       console.error(err);
     } finally {
       setIsFullPageLoading(false);
@@ -101,7 +109,7 @@ export default function Cart() {
       navigate("/order-success");
     } catch (err) {
       console.error(err);
-      alert("訂單送出失敗，請稍後再試");
+      showError("訂單送出失敗，請稍後再試");
     } finally {
       setIsFullPageLoading(false);
     }
@@ -290,15 +298,6 @@ export default function Cart() {
                 <span>小計</span>
                 <span>NT$ {cartData.total.toLocaleString()}</span>
               </div>
-              {cartData.total !== cartData.final_total && (
-                <div className="flex justify-between text-sm text-neon-orange">
-                  <span>折扣</span>
-                  <span>
-                    -NT${" "}
-                    {(cartData.total - cartData.final_total).toLocaleString()}
-                  </span>
-                </div>
-              )}
               <hr className="border-white/5" />
               <div className="flex justify-between">
                 <span className="text-base font-semibold text-white">

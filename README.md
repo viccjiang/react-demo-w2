@@ -8,6 +8,7 @@ React 練習專案，包含健身 APP Landing Page（前台）與後台管理系
 - Vite 7
 - Tailwind CSS 4
 - React Router 7 (Hash Mode, Data Mode)
+- Redux Toolkit + React Redux (全域狀態管理、訊息通知)
 - React Hook Form (表單驗證)
 - react-loader-spinner (Loading 效果)
 - Axios (API 服務層封裝)
@@ -45,15 +46,35 @@ VITE_API_PATH=<你的六角學院 API 路徑>
 - 購物車（數量調整、刪除、清空）
 - 結帳表單（React Hook Form 驗證：姓名、Email、電話、地址、留言）
 - 訂單成功頁（3 秒倒數自動跳轉）
+- Toast 訊息通知（Redux Toolkit，操作成功/失敗即時回饋，2 秒自動消失）
 - Loading 效果（react-loader-spinner）
 
 ### 後台
 
 - 登入驗證（React Hook Form：Email 格式 + 密碼至少 6 碼）
+- 登出功能（清除 token + API 登出）
 - 產品 CRUD 管理（Modal 新增/編輯/刪除）
 - 訂單列表（付款狀態、分頁）
 - 優惠券管理（待實作）
 - Cookie + Token 認證，401 自動重導登入
+- Toast 訊息通知（操作成功/失敗即時回饋）
+
+## State Management (Redux Toolkit)
+
+使用 Redux Toolkit 管理全域訊息通知系統：
+
+- **Store**（`src/store/store.ts`）：`configureStore` 集中管理 state
+- **Message Slice**（`src/slice/messageSlice.ts`）：訊息的新增/移除 + `createAsyncThunk` 2 秒自動消失
+- **MessageToast**（`src/components/MessageToast.tsx`）：全域 Toast 元件，固定右上角顯示
+- **useMessage Hook**（`src/hooks/useMessage.ts`）：封裝 `showSuccess()` / `showError()`，元件只表達意圖
+
+```
+元件呼叫 showSuccess / showError
+  → useMessage dispatch createAsyncMessage
+    → messageSlice 新增訊息
+      → MessageToast 從 Redux state 讀取並渲染
+        → 2 秒後自動移除（也可手動關閉）
+```
 
 ## Routes
 
@@ -74,17 +95,22 @@ VITE_API_PATH=<你的六角學院 API 路徑>
 
 ```
 src/
-├── main.tsx                # createHashRouter + RouterProvider 入口
+├── main.tsx                # createHashRouter + RouterProvider + Redux Provider
 ├── routes/index.tsx        # 路由表
+├── store/store.ts          # Redux store（configureStore）
+├── slice/
+│   └── messageSlice.ts     # 訊息通知 slice（createMessage、removeMessage、createAsyncMessage）
+├── hooks/
+│   └── useMessage.ts       # 訊息通知 hook（showSuccess、showError）
 ├── services/               # API 服務層（集中管理所有 API 呼叫）
 │   ├── api.ts              # axios instance（api / apiAuth）+ interceptors
-│   ├── auth.ts             # 認證 API（login、checkUserAuth）
+│   ├── auth.ts             # 認證 API（login、checkUserAuth、logout）
 │   ├── products.ts         # 產品 API（前台 + 後台 CRUD）
 │   ├── cart.ts             # 購物車 API
 │   └── orders.ts           # 訂單 API（submitOrder、getAdminOrders）
 ├── layouts/
 │   ├── FrontLayout.tsx     # 前台 Layout（Navbar + Outlet + Footer）
-│   └── AdminLayout.tsx     # 後台 Layout（側邊欄 + Outlet，含驗證）
+│   └── AdminLayout.tsx     # 後台 Layout（側邊欄 + Outlet，含驗證 + 登出）
 ├── assets/style.css        # Tailwind + 自定義動畫與霓虹光效
 ├── dto/                    # API 型別定義（Product、Cart、Auth、Order）
 ├── types/                  # Modal 型別
@@ -103,6 +129,7 @@ src/
     ├── Pagination.tsx      # 通用分頁
     ├── ProductModal.tsx    # 後台 CRUD Modal
     ├── FullPageLoader.tsx  # 全頁 Loading 遮罩
+    ├── MessageToast.tsx    # 全域 Toast 訊息通知元件
     └── fitness/            # 前台共用元件
 ```
 
@@ -122,6 +149,7 @@ src/
 **後台（Admin，需認證）**
 
 - `POST /admin/signin` - 登入
+- `POST /logout` - 登出
 - `POST /api/user/check` - 驗證 token
 - `GET /api/{path}/admin/products` - 管理產品列表
 - `POST /api/{path}/admin/product` - 新增產品

@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router";
-import { Search, Filter, ChevronRight, ShoppingBag, ShoppingCart } from "lucide-react";
+import { Search, Filter, ShoppingBag, ShoppingCart } from "lucide-react";
 import { Oval } from "react-loader-spinner";
 import type { Product, Pagination as PaginationType } from "../dto/product";
 import { getProducts as fetchProducts } from "../services/products";
 import { addToCart as addToCartApi } from "../services/cart";
+import useMessage from "../hooks/useMessage";
 
 const CATEGORIES = ["全部", "培訓", "體驗課"];
 
@@ -21,6 +22,7 @@ export default function ProductList() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [addingToCart, setAddingToCart] = useState<Set<string | number>>(new Set());
+  const { showSuccess, showError } = useMessage();
 
   const addToCart = async (e: React.MouseEvent, productId: string | number) => {
     e.preventDefault();
@@ -28,7 +30,9 @@ export default function ProductList() {
     setAddingToCart((prev) => new Set(prev).add(productId));
     try {
       await addToCartApi(productId);
+      showSuccess("已加入購物車");
     } catch (err) {
+      showError("加入購物車失敗");
       console.error(err);
     } finally {
       setAddingToCart((prev) => {
@@ -182,19 +186,6 @@ export default function ProductList() {
                     </span>
                   </div>
 
-                  {/* Discount Badge */}
-                  {product.price < product.origin_price && (
-                    <div className="absolute right-3 top-3 rounded-lg bg-neon-orange/90 px-2.5 py-1">
-                      <span className="text-xs font-bold text-white">
-                        {Math.round(
-                          ((product.origin_price - product.price) /
-                            product.origin_price) *
-                            100,
-                        )}
-                        % 折扣
-                      </span>
-                    </div>
-                  )}
                 </div>
 
                 {/* Content */}
@@ -211,11 +202,6 @@ export default function ProductList() {
                   {/* Price & CTA */}
                   <div className="mt-5 flex items-end justify-between">
                     <div>
-                      {product.price < product.origin_price && (
-                        <p className="text-xs text-slate-500 line-through">
-                          NT$ {product.origin_price.toLocaleString()}
-                        </p>
-                      )}
                       <p className="font-heading text-2xl font-bold text-neon-green">
                         NT$ {product.price.toLocaleString()}
                         <span className="ml-1 text-sm font-normal text-slate-500">
@@ -223,25 +209,19 @@ export default function ProductList() {
                         </span>
                       </p>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={(e) => addToCart(e, product.id)}
-                        disabled={addingToCart.has(product.id)}
-                        className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-r from-neon-blue to-neon-purple text-white transition-all hover:shadow-[0_0_15px_rgba(0,212,255,0.4)] disabled:opacity-50"
-                        aria-label={`將 ${product.title} 加入購物車`}
-                      >
-                        {addingToCart.has(product.id) ? (
-                          <Oval height={16} width={16} color="#fff" secondaryColor="#a855f7" strokeWidth={4} strokeWidthSecondary={4} />
-                        ) : (
-                          <ShoppingCart className="h-4 w-4" />
-                        )}
-                      </button>
-                      <div className="flex items-center gap-1 rounded-xl bg-white/5 px-3 py-2 text-sm font-medium text-slate-300 transition-colors group-hover:bg-neon-blue/10 group-hover:text-neon-blue">
-                        詳情
-                        <ChevronRight className="h-4 w-4" />
-                      </div>
-                    </div>
+                    <button
+                      type="button"
+                      onClick={(e) => addToCart(e, product.id)}
+                      disabled={addingToCart.has(product.id)}
+                      className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-neon-blue to-neon-purple px-4 py-2.5 text-sm font-medium text-white transition-all hover:shadow-[0_0_15px_rgba(0,212,255,0.4)] disabled:opacity-50"
+                    >
+                      {addingToCart.has(product.id) ? (
+                        <Oval height={16} width={16} color="#fff" secondaryColor="#a855f7" strokeWidth={4} strokeWidthSecondary={4} />
+                      ) : (
+                        <ShoppingCart className="h-4 w-4" />
+                      )}
+                      加入購物車
+                    </button>
                   </div>
                 </div>
               </Link>

@@ -14,6 +14,7 @@ import {
   updateProduct,
   deleteProduct,
 } from "../services/products";
+import useMessage from "../hooks/useMessage";
 
 export default function AdminProducts() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -26,6 +27,7 @@ export default function AdminProducts() {
   });
   const [isLoading, setIsLoading] = useState(true);
   const modalRef = useRef<ProductModalHandle>(null);
+  const { showSuccess, showError } = useMessage();
 
   const getProductData = async (page: number = 1) => {
     setIsLoading(true);
@@ -49,7 +51,7 @@ export default function AdminProducts() {
           price: Number(data.price),
           is_enabled: data.is_enabled ? 1 : 0,
         });
-        alert("產品建立成功");
+        showSuccess("產品建立成功");
       } else if (type === "edit") {
         await updateProduct(data.id, {
           ...data,
@@ -57,14 +59,14 @@ export default function AdminProducts() {
           price: Number(data.price),
           is_enabled: data.is_enabled ? 1 : 0,
         });
-        alert("產品更新成功");
+        showSuccess("產品更新成功");
       } else if (type === "delete") {
         await deleteProduct(data.id);
-        alert("產品刪除成功");
+        showSuccess("產品刪除成功");
       }
       await getProductData();
     } catch (error) {
-      alert(`操作失敗: ${error instanceof Error ? error.message : "Unknown error"}`);
+      showError(`操作失敗: ${error instanceof Error ? error.message : "Unknown error"}`);
     }
   };
 

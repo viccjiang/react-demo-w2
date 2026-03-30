@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import { Clock, Flame, Signal, ChevronRight } from "lucide-react";
 
 interface WorkoutCard {
@@ -129,13 +130,13 @@ export default function WorkoutCards() {
                   </div>
                 </div>
 
-                <button
-                  type="button"
+                <Link
+                  to="/products"
                   className={`mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r ${workout.accentColor} py-3 font-body text-sm font-semibold text-white opacity-90 transition-all duration-200 hover:opacity-100 hover:shadow-lg`}
                 >
                   開始訓練
                   <ChevronRight className="h-4 w-4" />
-                </button>
+                </Link>
               </div>
             </div>
           ))}

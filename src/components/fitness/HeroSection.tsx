@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import { Flame, ChevronRight, Zap, Target, TrendingUp } from "lucide-react";
 
 const stats = [
@@ -55,19 +56,19 @@ export default function HeroSection() {
 
         {/* CTA Buttons */}
         <div className="animate-slide-up mt-10 flex flex-col items-center gap-4 sm:flex-row" style={{ animationDelay: "0.3s" }}>
-          <button
-            type="button"
+          <Link
+            to="/products"
             className="group flex items-center gap-2 rounded-2xl bg-gradient-to-r from-neon-blue to-neon-purple px-8 py-4 font-body text-base font-bold text-white shadow-[0_0_30px_rgba(0,212,255,0.3)] transition-all duration-300 hover:shadow-[0_0_50px_rgba(0,212,255,0.5)] hover:scale-[1.02]"
           >
             立即開始訓練
             <ChevronRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-1" />
-          </button>
-          <button
-            type="button"
+          </Link>
+          <Link
+            to="/products"
             className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-8 py-4 font-body text-base font-semibold text-white backdrop-blur-sm transition-all duration-200 hover:border-white/20 hover:bg-white/10"
           >
             觀看介紹
-          </button>
+          </Link>
         </div>
 
         {/* Stats Row */}

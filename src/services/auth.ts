@@ -8,3 +8,7 @@ export const login = (data: LoginFormData) => {
 export const checkUserAuth = () => {
   return apiAuth.post("/api/user/check");
 };
+
+export const logout = () => {
+  return apiAuth.post("/logout");
+};

@@ -4,6 +4,7 @@ import { Oval } from "react-loader-spinner";
 import { Lock, Mail } from "lucide-react";
 import type { LoginFormData } from "../dto/auth";
 import { login } from "../services/auth";
+import useMessage from "../hooks/useMessage";
 
 function setAuthToken(token: string, expired: string) {
   document.cookie = `hexToken=${token};expires=${new Date(expired)};`;
@@ -11,6 +12,7 @@ function setAuthToken(token: string, expired: string) {
 
 export default function Login() {
   const navigate = useNavigate();
+  const { showError } = useMessage();
   const {
     register,
     handleSubmit,
@@ -28,9 +30,9 @@ export default function Login() {
       navigate("/admin/products");
     } catch (error) {
       if (error instanceof Error) {
-        alert(`登入失敗: ${(error as { response?: { data?: { message?: string } } }).response?.data?.message || "Unknown error"}`);
+        showError(`登入失敗: ${(error as { response?: { data?: { message?: string } } }).response?.data?.message || "Unknown error"}`);
       } else {
-        alert("登入失敗: Unknown error");
+        showError("登入失敗: Unknown error");
       }
     }
   };

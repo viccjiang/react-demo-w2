@@ -85,7 +85,7 @@ export default function Navbar() {
             to="/products"
             className="rounded-xl bg-gradient-to-r from-neon-blue to-neon-purple px-5 py-2.5 font-body text-sm font-semibold text-white transition-all duration-200 hover:shadow-[0_0_20px_rgba(0,212,255,0.4)]"
           >
-            免費體驗
+            立即探索
           </Link>
         </div>
 
@@ -146,7 +146,7 @@ export default function Navbar() {
               className="w-full rounded-xl bg-gradient-to-r from-neon-blue to-neon-purple py-3 text-center font-body text-sm font-semibold text-white"
               onClick={() => setIsOpen(false)}
             >
-              免費體驗
+              立即探索
             </Link>
           </div>
         </div>

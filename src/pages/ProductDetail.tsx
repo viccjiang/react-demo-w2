@@ -13,6 +13,7 @@ import { Oval } from "react-loader-spinner";
 import type { Product } from "../dto/product";
 import { getProduct as fetchProduct } from "../services/products";
 import { addToCart as addToCartApi } from "../services/cart";
+import useMessage from "../hooks/useMessage";
 
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
@@ -22,6 +23,7 @@ export default function ProductDetail() {
   const [quantity, setQuantity] = useState(1);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
+  const { showSuccess, showError } = useMessage();
 
   const handleAddToCart = async () => {
     if (!product) return;
@@ -29,8 +31,10 @@ export default function ProductDetail() {
     try {
       await addToCartApi(product.id, quantity);
       setAddedToCart(true);
+      showSuccess("已加入購物車");
       setTimeout(() => setAddedToCart(false), 2000);
     } catch (err) {
+      showError("加入購物車失敗");
       console.error(err);
     } finally {
       setIsAddingToCart(false);
@@ -60,13 +64,6 @@ export default function ProductDetail() {
         ...(product.imagesUrl || []),
       ].filter((url): url is string => !!url && url.trim() !== "")
     : [];
-
-  const discountPercent =
-    product && product.price < product.origin_price
-      ? Math.round(
-          ((product.origin_price - product.price) / product.origin_price) * 100,
-        )
-      : 0;
 
   if (isLoading) {
     return (
@@ -147,13 +144,6 @@ export default function ProductDetail() {
                 </div>
               )}
 
-              {discountPercent > 0 && (
-                <div className="absolute right-4 top-4 rounded-xl bg-neon-orange/90 px-3 py-1.5">
-                  <span className="text-sm font-bold text-white">
-                    {discountPercent}% 折扣
-                  </span>
-                </div>
-              )}
             </div>
 
             {/* Thumbnails */}
@@ -216,11 +206,6 @@ export default function ProductDetail() {
                 <span className="font-heading text-4xl font-bold text-neon-green">
                   NT$ {product.price.toLocaleString()}
                 </span>
-                {discountPercent > 0 && (
-                  <span className="text-lg text-slate-500 line-through">
-                    NT$ {product.origin_price.toLocaleString()}
-                  </span>
-                )}
               </div>
               <p className="mt-1 text-sm text-slate-500">
                 每 {product.unit}
