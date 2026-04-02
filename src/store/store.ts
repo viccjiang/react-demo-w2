@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import messageReducer from "../slice/messageSlice";
+import favoritesReducer from "../slice/favoritesSlice";
 
 export const store = configureStore({
   reducer: {
     message: messageReducer,
+    favorites: favoritesReducer,
   },
 });
 

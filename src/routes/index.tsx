@@ -8,6 +8,7 @@ import Login from "../pages/front/Login";
 import AdminProducts from "../pages/admin/AdminProducts";
 import AdminOrders from "../pages/admin/AdminOrders";
 import AdminCoupons from "../pages/admin/AdminCoupons";
+import Favorites from "../pages/front/Favorites";
 import OrderSuccess from "../pages/front/OrderSuccess";
 import NotFound from "../pages/front/NotFound";
 
@@ -31,6 +32,10 @@ const routes = [
       {
         path: "cart",
         element: <Cart />,
+      },
+      {
+        path: "favorites",
+        element: <Favorites />,
       },
       {
         path: "order-success",

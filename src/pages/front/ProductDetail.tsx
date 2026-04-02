@@ -10,14 +10,17 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { Oval } from "react-loader-spinner";
+import { useDispatch } from "react-redux";
 import type { Product } from "../../dto/product";
 import { getProduct as fetchProduct } from "../../services/products";
 import { addToCart as addToCartApi } from "../../services/cart";
+import { addViewed } from "../../slice/favoritesSlice";
 import useMessage from "../../hooks/useMessage";
 import usePageTitle from "../../hooks/usePageTitle";
 
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
+  const dispatch = useDispatch();
   const [product, setProduct] = useState<Product | null>(null);
   usePageTitle(product?.title ?? "產品詳情");
   const [isLoading, setIsLoading] = useState(true);
@@ -51,6 +54,7 @@ export default function ProductDetail() {
         const data = response.data.product;
         setProduct(data);
         setSelectedImage(data.imageUrl || "");
+        dispatch(addViewed(String(data.id)));
       } catch (err) {
         console.error(err);
       } finally {

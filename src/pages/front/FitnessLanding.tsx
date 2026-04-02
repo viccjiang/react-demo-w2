@@ -1,6 +1,6 @@
 import usePageTitle from "../../hooks/usePageTitle";
 import HeroSection from "../../components/fitness/HeroSection";
-import WorkoutCards from "../../components/fitness/WorkoutCards";
+import SwipeCards from "../../components/fitness/SwipeCards";
 import ProgressTracking from "../../components/fitness/ProgressTracking";
 import TrainerProfiles from "../../components/fitness/TrainerProfiles";
 import SubscriptionCTA from "../../components/fitness/SubscriptionCTA";
@@ -10,7 +10,7 @@ export default function FitnessLanding() {
   return (
     <main>
       <HeroSection />
-      <WorkoutCards />
+      <SwipeCards />
       <ProgressTracking />
       <TrainerProfiles />
       <SubscriptionCTA />

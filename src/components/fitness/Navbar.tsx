@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router";
-import { Repeat2, Menu, X, ShoppingCart } from "lucide-react";
+import { Repeat2, Menu, X, ShoppingCart, Heart } from "lucide-react";
+import { useSelector } from "react-redux";
+import type { RootState } from "../../store/store";
 
 const navLinks = [
   { label: "探索課程", href: "/products", isRoute: true },
@@ -14,6 +16,9 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const favoritesCount = useSelector(
+    (s: RootState) => s.favorites.favorites.length
+  );
 
   const scrollToSection = (hash: string) => {
     const id = hash.replace("#", "");
@@ -68,6 +73,18 @@ export default function Navbar() {
         </div>
 
         <div className="hidden items-center gap-4 md:flex">
+          <Link
+            to="/favorites"
+            className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 text-slate-400 transition-colors hover:border-neon-pink/30 hover:text-neon-pink"
+            aria-label="我的收藏"
+          >
+            <Heart className="h-5 w-5" />
+            {favoritesCount > 0 && (
+              <span className="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-neon-pink text-[10px] font-bold text-white">
+                {favoritesCount > 99 ? "99+" : favoritesCount}
+              </span>
+            )}
+          </Link>
           <Link
             to="/cart"
             className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 text-slate-400 transition-colors hover:border-neon-blue/30 hover:text-neon-blue"
@@ -126,6 +143,13 @@ export default function Navbar() {
                 </button>
               ),
             )}
+            <Link
+              to="/favorites"
+              className="font-body text-base font-medium text-slate-300 transition-colors hover:text-neon-pink"
+              onClick={() => setIsOpen(false)}
+            >
+              我的收藏{favoritesCount > 0 && ` (${favoritesCount})`}
+            </Link>
             <Link
               to="/cart"
               className="font-body text-base font-medium text-slate-300 transition-colors hover:text-neon-blue"
