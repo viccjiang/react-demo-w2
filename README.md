@@ -29,11 +29,11 @@ npm run dev
 
 ## Environment Variables
 
-在 `.env` 中設定：
+複製 `.env.example` 為 `.env` 並填入對應值：
 
 ```
 VITE_API_BASE=https://ec-course-api.hexschool.io/v2
-VITE_API_PATH=<你的六角學院 API 路徑>
+VITE_API_PATH=<your API path>
 ```
 
 ## Features
@@ -101,7 +101,8 @@ src/
 ├── slice/
 │   └── messageSlice.ts     # 訊息通知 slice（createMessage、removeMessage、createAsyncMessage）
 ├── hooks/
-│   └── useMessage.ts       # 訊息通知 hook（showSuccess、showError）
+│   ├── useMessage.ts       # 訊息通知 hook（showSuccess、showError）
+│   └── usePageTitle.ts     # 頁面標題 hook（動態設定 document.title）
 ├── services/               # API 服務層（集中管理所有 API 呼叫）
 │   ├── api.ts              # axios instance（api / apiAuth）+ interceptors
 │   ├── auth.ts             # 認證 API（login、checkUserAuth、logout）
@@ -115,16 +116,18 @@ src/
 ├── dto/                    # API 型別定義（Product、Cart、Auth、Order）
 ├── types/                  # Modal 型別
 ├── pages/
-│   ├── FitnessLanding.tsx  # 健身首頁
-│   ├── ProductList.tsx     # 前台產品列表
-│   ├── ProductDetail.tsx   # 前台產品詳情
-│   ├── Cart.tsx            # 購物車 + 結帳表單
-│   ├── OrderSuccess.tsx    # 訂單成功頁
-│   ├── Login.tsx           # 登入頁面
-│   ├── AdminProducts.tsx   # 後台產品管理
-│   ├── AdminOrders.tsx     # 後台訂單列表
-│   ├── AdminCoupons.tsx    # 後台優惠券管理
-│   └── NotFound.tsx        # 404 頁面
+│   ├── front/              # 前台頁面
+│   │   ├── FitnessLanding.tsx  # 健身首頁
+│   │   ├── ProductList.tsx     # 前台產品列表
+│   │   ├── ProductDetail.tsx   # 前台產品詳情
+│   │   ├── Cart.tsx            # 購物車 + 結帳表單
+│   │   ├── OrderSuccess.tsx    # 訂單成功頁
+│   │   ├── Login.tsx           # 登入頁面
+│   │   └── NotFound.tsx        # 404 頁面
+│   └── admin/              # 後台頁面
+│       ├── AdminProducts.tsx   # 後台產品管理
+│       ├── AdminOrders.tsx     # 後台訂單列表
+│       └── AdminCoupons.tsx    # 後台優惠券管理
 └── components/
     ├── Pagination.tsx      # 通用分頁
     ├── ProductModal.tsx    # 後台 CRUD Modal
