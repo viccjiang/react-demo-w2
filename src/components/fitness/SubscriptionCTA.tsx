@@ -93,7 +93,7 @@ export default function SubscriptionCTA() {
           </p>
         </div>
 
-        <div className="grid items-start gap-6 lg:grid-cols-3">
+        <div className="grid items-stretch gap-6 lg:grid-cols-3">
           {plans.map((plan) => (
             <div
               key={plan.name}
@@ -111,7 +111,7 @@ export default function SubscriptionCTA() {
                 </div>
               )}
 
-              <div className="p-8">
+              <div className="flex h-full flex-col p-8">
                 <div className={`mb-4 inline-flex rounded-xl p-3 ${plan.highlighted ? "bg-neon-orange/10" : "bg-white/5"}`}>
                   <plan.icon className={`h-6 w-6 ${plan.accentColor}`} />
                 </div>
@@ -131,7 +131,7 @@ export default function SubscriptionCTA() {
                   </span>
                 </div>
 
-                <ul className="mt-8 space-y-3">
+                <ul className="mt-8 flex-1 space-y-3">
                   {plan.features.map((feature) => (
                     <li key={feature} className="flex items-start gap-3">
                       <Check className={`mt-0.5 h-4 w-4 shrink-0 ${plan.accentColor}`} />

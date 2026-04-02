@@ -10,14 +10,16 @@ import {
   Plus,
   ArrowLeft,
 } from "lucide-react";
-import type { CartData, CartItem } from "../dto/cart";
-import type { OrderFormData } from "../dto/order";
-import FullPageLoader from "../components/FullPageLoader";
-import * as cartService from "../services/cart";
-import { submitOrder as submitOrderApi } from "../services/orders";
-import useMessage from "../hooks/useMessage";
+import type { CartData, CartItem } from "../../dto/cart";
+import type { OrderFormData } from "../../dto/order";
+import FullPageLoader from "../../components/FullPageLoader";
+import usePageTitle from "../../hooks/usePageTitle";
+import * as cartService from "../../services/cart";
+import { submitOrder as submitOrderApi } from "../../services/orders";
+import useMessage from "../../hooks/useMessage";
 
 export default function Cart() {
+  usePageTitle("購物車");
   const navigate = useNavigate();
   const [cartData, setCartData] = useState<CartData>({
     carts: [],

@@ -1,6 +1,8 @@
 import { Link } from "react-router";
+import usePageTitle from "../../hooks/usePageTitle";
 
 export default function NotFound() {
+  usePageTitle("找不到頁面");
   return (
     <div className="flex min-h-[60vh] flex-col items-center justify-center text-center">
       <h1 className="font-heading text-6xl font-bold text-white">404</h1>

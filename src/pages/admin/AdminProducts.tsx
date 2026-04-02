@@ -1,22 +1,24 @@
 import { useEffect, useState, useRef } from "react";
 import { Oval } from "react-loader-spinner";
-import type { Product, Pagination as PaginationType } from "../dto/product";
-import ProductModal from "../components/ProductModal";
-import Pagination from "../components/Pagination";
+import type { Product, Pagination as PaginationType } from "../../dto/product";
+import ProductModal from "../../components/ProductModal";
+import Pagination from "../../components/Pagination";
 import type {
   ProductModalHandle,
   ModalType,
   TemplateData,
-} from "../types/modal";
+} from "../../types/modal";
+import usePageTitle from "../../hooks/usePageTitle";
 import {
   getAdminProducts,
   createProduct,
   updateProduct,
   deleteProduct,
-} from "../services/products";
-import useMessage from "../hooks/useMessage";
+} from "../../services/products";
+import useMessage from "../../hooks/useMessage";
 
 export default function AdminProducts() {
+  usePageTitle("後台 - 產品管理");
   const [products, setProducts] = useState<Product[]>([]);
   const [pagination, setPagination] = useState<PaginationType>({
     total_pages: 0,

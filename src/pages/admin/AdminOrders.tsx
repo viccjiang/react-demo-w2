@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { Oval } from "react-loader-spinner";
-import type { Order } from "../dto/order";
-import type { Pagination as PaginationType } from "../dto/product";
-import Pagination from "../components/Pagination";
-import { getAdminOrders } from "../services/orders";
+import type { Order } from "../../dto/order";
+import type { Pagination as PaginationType } from "../../dto/product";
+import Pagination from "../../components/Pagination";
+import { getAdminOrders } from "../../services/orders";
+import usePageTitle from "../../hooks/usePageTitle";
 
 export default function AdminOrders() {
+  usePageTitle("後台 - 訂單管理");
   const [orders, setOrders] = useState<Order[]>([]);
   const [pagination, setPagination] = useState<PaginationType>({
     total_pages: 0,

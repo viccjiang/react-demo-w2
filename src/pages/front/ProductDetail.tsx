@@ -10,14 +10,16 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { Oval } from "react-loader-spinner";
-import type { Product } from "../dto/product";
-import { getProduct as fetchProduct } from "../services/products";
-import { addToCart as addToCartApi } from "../services/cart";
-import useMessage from "../hooks/useMessage";
+import type { Product } from "../../dto/product";
+import { getProduct as fetchProduct } from "../../services/products";
+import { addToCart as addToCartApi } from "../../services/cart";
+import useMessage from "../../hooks/useMessage";
+import usePageTitle from "../../hooks/usePageTitle";
 
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<Product | null>(null);
+  usePageTitle(product?.title ?? "產品詳情");
   const [isLoading, setIsLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState("");
   const [quantity, setQuantity] = useState(1);

@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { CheckCircle } from "lucide-react";
+import usePageTitle from "../../hooks/usePageTitle";
 
 export default function OrderSuccess() {
+  usePageTitle("訂單成功");
   const navigate = useNavigate();
   const [countdown, setCountdown] = useState(3);
 

@@ -2,14 +2,16 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router";
 import { Search, Filter, ShoppingBag, ShoppingCart } from "lucide-react";
 import { Oval } from "react-loader-spinner";
-import type { Product, Pagination as PaginationType } from "../dto/product";
-import { getProducts as fetchProducts } from "../services/products";
-import { addToCart as addToCartApi } from "../services/cart";
-import useMessage from "../hooks/useMessage";
+import type { Product, Pagination as PaginationType } from "../../dto/product";
+import { getProducts as fetchProducts } from "../../services/products";
+import { addToCart as addToCartApi } from "../../services/cart";
+import useMessage from "../../hooks/useMessage";
+import usePageTitle from "../../hooks/usePageTitle";
 
 const CATEGORIES = ["全部", "培訓", "體驗課"];
 
 export default function ProductList() {
+  usePageTitle("產品列表");
   const [products, setProducts] = useState<Product[]>([]);
   const [pagination, setPagination] = useState<PaginationType>({
     total_pages: 0,

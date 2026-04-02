@@ -1,6 +1,8 @@
 import { Ticket } from "lucide-react";
+import usePageTitle from "../../hooks/usePageTitle";
 
 export default function AdminCoupons() {
+  usePageTitle("後台 - 優惠券管理");
   return (
     <div className="flex flex-col items-center py-24 text-center">
       <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/5">

@@ -2,15 +2,17 @@ import { useNavigate, Link } from "react-router";
 import { useForm } from "react-hook-form";
 import { Oval } from "react-loader-spinner";
 import { Lock, Mail } from "lucide-react";
-import type { LoginFormData } from "../dto/auth";
-import { login } from "../services/auth";
-import useMessage from "../hooks/useMessage";
+import type { LoginFormData } from "../../dto/auth";
+import { login } from "../../services/auth";
+import useMessage from "../../hooks/useMessage";
+import usePageTitle from "../../hooks/usePageTitle";
 
 function setAuthToken(token: string, expired: string) {
   document.cookie = `hexToken=${token};expires=${new Date(expired)};`;
 }
 
 export default function Login() {
+  usePageTitle("登入");
   const navigate = useNavigate();
   const { showError } = useMessage();
   const {

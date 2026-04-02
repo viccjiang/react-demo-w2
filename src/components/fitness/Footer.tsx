@@ -72,6 +72,9 @@ export default function Footer() {
           <p className="font-body text-xs text-slate-600">
             為全球健身愛好者傾心打造。
           </p>
+          <p className="font-body text-xs text-slate-600">
+            本網站僅供學術練習使用，不提供任何商業服務。
+          </p>
         </div>
       </div>
     </footer>

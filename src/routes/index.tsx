@@ -1,15 +1,15 @@
 import FrontLayout from "../layouts/FrontLayout";
 import AdminLayout from "../layouts/AdminLayout";
-import FitnessLanding from "../pages/FitnessLanding";
-import ProductList from "../pages/ProductList";
-import ProductDetail from "../pages/ProductDetail";
-import Cart from "../pages/Cart";
-import Login from "../pages/Login";
-import AdminProducts from "../pages/AdminProducts";
-import AdminOrders from "../pages/AdminOrders";
-import AdminCoupons from "../pages/AdminCoupons";
-import OrderSuccess from "../pages/OrderSuccess";
-import NotFound from "../pages/NotFound";
+import FitnessLanding from "../pages/front/FitnessLanding";
+import ProductList from "../pages/front/ProductList";
+import ProductDetail from "../pages/front/ProductDetail";
+import Cart from "../pages/front/Cart";
+import Login from "../pages/front/Login";
+import AdminProducts from "../pages/admin/AdminProducts";
+import AdminOrders from "../pages/admin/AdminOrders";
+import AdminCoupons from "../pages/admin/AdminCoupons";
+import OrderSuccess from "../pages/front/OrderSuccess";
+import NotFound from "../pages/front/NotFound";
 
 const routes = [
   {
