@@ -39,7 +39,7 @@ export default function SwipeCards() {
         // 優先載入瀏覽過的產品
         if (viewedIds.length > 0) {
           const results = await Promise.allSettled(
-            viewedIds.slice(0, 10).map((id) => fetchProduct(id))
+            viewedIds.slice(0, 10).map((id) => fetchProduct(id)),
           );
           for (const r of results) {
             if (r.status === "fulfilled") {
@@ -54,7 +54,7 @@ export default function SwipeCards() {
           const apiProducts: Product[] = res.data.products || [];
           const existingIds = new Set(products.map((p) => String(p.id)));
           const extra = apiProducts.filter(
-            (p) => !existingIds.has(String(p.id))
+            (p) => !existingIds.has(String(p.id)),
           );
           products = [...products, ...extra];
         }
@@ -132,7 +132,7 @@ export default function SwipeCards() {
 
   return (
     <section className="relative overflow-hidden bg-dark-950 py-24">
-      <div className="pointer-events-none absolute right-0 top-0 h-[500px] w-[500px] rounded-full bg-neon-purple/5 blur-[150px]" />
+      <div className="pointer-events-none absolute top-0 right-0 h-[500px] w-[500px] rounded-full bg-neon-purple/5 blur-[150px]" />
 
       <div className="relative mx-auto max-w-7xl px-6">
         <SectionHeader />
@@ -237,12 +237,11 @@ function SectionHeader() {
 
 function SwipeCard({
   product,
-  isFavorited,
   onSwipeRight,
   onSwipeLeft,
 }: {
   product: Product;
-  isFavorited: boolean;
+  isFavorited?: boolean;
   onSwipeRight: () => void;
   onSwipeLeft: () => void;
 }) {
@@ -289,7 +288,7 @@ function SwipeCard({
         <div className="absolute inset-0 bg-gradient-to-t from-dark-800 via-transparent to-transparent" />
 
         {/* Category badge */}
-        <div className="absolute left-4 top-4 rounded-lg bg-dark-900/80 px-3 py-1 backdrop-blur-sm">
+        <div className="absolute top-4 left-4 rounded-lg bg-dark-900/80 px-3 py-1 backdrop-blur-sm">
           <span className="flex items-center gap-1.5 font-body text-xs font-semibold text-neon-blue">
             <Tag className="h-3 w-3" />
             {product.category}
@@ -301,7 +300,7 @@ function SwipeCard({
           className="absolute inset-0 flex items-center justify-center bg-red-500/10"
           style={{ opacity: likeOpacity }}
         >
-          <Heart className="h-20 w-20 fill-red-500 text-red-500 -rotate-12" />
+          <Heart className="h-20 w-20 -rotate-12 fill-red-500 text-red-500" />
         </motion.div>
 
         {/* NOPE overlay */}
@@ -309,7 +308,7 @@ function SwipeCard({
           className="absolute inset-0 flex items-center justify-center bg-slate-500/10"
           style={{ opacity: nopeOpacity }}
         >
-          <HeartCrack className="h-20 w-20 text-slate-500 rotate-12" />
+          <HeartCrack className="h-20 w-20 rotate-12 text-slate-500" />
         </motion.div>
       </div>
 
