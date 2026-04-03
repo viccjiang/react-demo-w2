@@ -49,6 +49,10 @@ export default function AdminLayout() {
     })();
   }, [navigate]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
   if (isChecking) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-dark-950">
